@@ -1,0 +1,57 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'admin_navigation.html' %}
+
+<script>
+    function checkpass() {
+        if(document.changepass.newpass.value != document.changepass.confirmpass.value) {
+            alert("New Password does not match")
+            document.changepass.confirmpass.focus()
+            return false
+        }
+        return true
+    }
+</script>
+
+<marquee style="font-family: 'Monotype-Corsiva'; font-weight: bold; font-size: 25px; color: lightgreen; background-color: black; margin-top: 1%">
+    Change password
+</marquee>
+
+<form class="container mt-5" method="POST" name="changepass" onsubmit="return checkpass()">
+    {% csrf_token %}
+    <label><b>Current Password</b></label>
+    <input type="password" class="form-control" name="currentpass" required="true">
+
+    <label><b>New Password</b></label>
+    <input type="password" class="form-control" name="newpass" required="true">
+
+    <label><b>Confirm New Password</b></label>
+    <input type="password" class="form-control" name="confirmpass" required="true">
+
+    <input type="submit" class="btn btn-primary" style="margin-top: 2%; height: 48px; font-size: 20px">
+</form>
+
+{% include 'footer.html' %}
+
+{% ifequal error "no" %}
+<script>
+    alert("Password changed successfully")
+    window.location = ("{% url 'Logout' %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert("Something went wrong, Try again !!")
+</script>
+{% endifequal %}
+
+{% ifequal error "not" %}
+<script>
+    alert("Your current password is wrong !!")
+</script>
+{% endifequal %}
+
+{% endblock %}
